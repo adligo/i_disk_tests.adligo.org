@@ -24,6 +24,6 @@ public class BaseDir {
 		if (StringUtils.isEmpty(baseDir)) {
 			return "";
 		}
-		return baseDir + "i_disk_test" + File.separator;
+		return baseDir + module + File.separator;
 	}
 }

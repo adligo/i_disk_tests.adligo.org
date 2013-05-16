@@ -37,8 +37,10 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 	
 	public void testCheckIfFileExists() {
 		ReadOnlyDiskConnection con = pool.getConnection();
-		assertFalse("running in " + new File(".").getAbsolutePath(), con.checkIfFileExists(baseDir + "test_data/foo.txt"));
-		assertTrue("running in " + new File(".").getAbsolutePath(),con.checkIfFileExists(baseDir + "test_data/read/hello.txt"));
+		String message = "running in " + new File(".").getAbsolutePath() +
+				"\n base dir is " + baseDir;
+		assertFalse(message, con.checkIfFileExists(baseDir + "test_data/foo.txt"));
+		assertTrue(message,con.checkIfFileExists(baseDir + "test_data/read/hello.txt"));
 		con.returnToPool();
 	}
 	
