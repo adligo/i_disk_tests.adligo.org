@@ -14,6 +14,8 @@ import org.adligo.tests.ATest;
 public class ReadOnlyDiskConnectionTests extends ATest {
 	private I_Pool<ReadOnlyDiskConnection> pool = new Pool<ReadOnlyDiskConnection>(
 			new PoolConfiguration<ReadOnlyDiskConnection>("testFactory", new ReadOnlyDiskConnectionFactory(), 1));
+	public static String baseDir = BaseDir.getBaseDir("i_disk_tests");
+	
 	private InputStream in;
 	private FileFilter txtFileFilter = new FileFilter() {
 		
@@ -25,6 +27,7 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 			return false;
 		}
 	};
+	
 		
 	public void testSimpleMethods() {
 		ReadOnlyDiskConnection con = pool.getConnection();
@@ -34,57 +37,57 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 	
 	public void testCheckIfFileExists() {
 		ReadOnlyDiskConnection con = pool.getConnection();
-		assertFalse("running in " + new File(".").getAbsolutePath(), con.checkIfFileExists("test_data/foo.txt"));
-		assertTrue("running in " + new File(".").getAbsolutePath(),con.checkIfFileExists("test_data/read/hello.txt"));
+		assertFalse("running in " + new File(".").getAbsolutePath(), con.checkIfFileExists(baseDir + "test_data/foo.txt"));
+		assertTrue("running in " + new File(".").getAbsolutePath(),con.checkIfFileExists(baseDir + "test_data/read/hello.txt"));
 		con.returnToPool();
 	}
 	
 	public void testCheckIfDirectoryExists() {
 		ReadOnlyDiskConnection con = pool.getConnection();
-		assertFalse(con.checkIfDirectoryExists("test_data/foo"));
-		assertTrue(con.checkIfDirectoryExists("test_data/read"));
+		assertFalse(con.checkIfDirectoryExists(baseDir + "test_data/foo"));
+		assertTrue(con.checkIfDirectoryExists(baseDir + "test_data/read"));
 		con.returnToPool();
 	}
 	
 	public void testCheckHidden() {
 		ReadOnlyDiskConnection con = pool.getConnection();
-		assertFalse(con.checkIfHidden("test_data/foo"));
-		assertTrue(con.checkIfHidden("test_data/read/.hidden"));
+		assertFalse(con.checkIfHidden(baseDir + "test_data/foo"));
+		assertTrue(con.checkIfHidden(baseDir + "test_data/read/.hidden"));
 		con.returnToPool();
 	}
 	
 	
 	public void testCheckLastModified() {
 		ReadOnlyDiskConnection con = pool.getConnection();
-		Long mod = con.getModifiedTime("test_data/read/hello.txt");
+		Long mod = con.getModifiedTime(baseDir + "test_data/read/hello.txt");
 		assertNotNull(mod);
 		assertTrue(mod >= 1);
-		Long mod2 = con.getModifiedTime("test_data/read/hello.txt");
+		Long mod2 = con.getModifiedTime(baseDir + "test_data/read/hello.txt");
 		assertEquals(mod, mod2);
 		
-		mod2 = con.getModifiedTime("notAFile.txt");
+		mod2 = con.getModifiedTime(baseDir + "notAFile.txt");
 		assertNull(mod2);
 		con.returnToPool();
 	}
 	
 	public void testGetFreeSpace() {
 		ReadOnlyDiskConnection con = pool.getConnection();
-		Long mod = con.getFreeSpace("test_data/read");
+		Long mod = con.getFreeSpace(baseDir + "test_data/read");
 		assertNotNull(mod);
 		assertTrue(mod >= 1);
 		
-		mod = con.getFreeSpace("dirNotThere");
+		mod = con.getFreeSpace(baseDir + "dirNotThere");
 		assertNull(mod);
 		con.returnToPool();
 	}
 	
 	public void testUsableSpace() {
 		ReadOnlyDiskConnection con = pool.getConnection();
-		Long mod = con.getUsableSpace("test_data/read");
+		Long mod = con.getUsableSpace(baseDir + "test_data/read");
 		assertNotNull(mod);
 		assertTrue(mod >= 1);
 		
-		mod = con.getUsableSpace("dirNotThere");
+		mod = con.getUsableSpace(baseDir + "dirNotThere");
 		assertNull(mod);
 		con.returnToPool();
 	}
@@ -95,7 +98,7 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
 		final StringBuffer sb = new StringBuffer();
-		con.readFile("test_data/read/hello.txt", new I_InputProcessor() {
+		con.readFile(baseDir + "test_data/read/hello.txt", new I_InputProcessor() {
 			
 			@Override
 			public void process(InputStream p, long byteLength) throws IOException {
@@ -111,7 +114,7 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
 		
-		con.readFile("test_data/read/hello.txt", new I_InputProcessor() {
+		con.readFile(baseDir + "test_data/read/hello.txt", new I_InputProcessor() {
 			
 			@Override
 			public void process(InputStream p, long byteLength) throws IOException {
@@ -131,16 +134,23 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 	public void testListContents() throws Exception {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
-		List<DiskItem> items = con.listContents("test_data", 0);
-		assertEquals(2, items.size());
+		List<DiskItem> items = con.listContents(baseDir + "test_data", 0);
+		assertEquals(3, items.size());
 		DiskItem item = items.get(0);
-		assertEquals("read", item.getName());
+		assertEquals("CVS", item.getName());
 		assertTrue(item.isDirectory());
 		assertFalse(item.isFile());
 		String path = item.getPath();
 		assertTrue(path.contains("test_data"));
 		
 		item = items.get(1);
+		assertEquals("read", item.getName());
+		assertTrue(item.isDirectory());
+		assertFalse(item.isFile());
+		path = item.getPath();
+		assertTrue(path.contains("test_data"));
+		
+		item = items.get(2);
 		assertEquals("write", item.getName());
 		assertTrue(item.isDirectory());
 		assertFalse(item.isFile());
@@ -151,53 +161,103 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 	public void testListContentsInfinateRecurse() throws Exception {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
-		List<DiskItem> items = con.listContents("test_data", -1);
-		assretCleanTestData(items);
+		List<DiskItem> items = con.listContents(baseDir + "test_data", -1);
+		assertEquals(18, items.size());
+		DiskItem item = items.get(0);
+		assertDir(item, "CVS", baseDir + "test_data");
+		item = items.get(1);
+		assertFile(item, "Entries", baseDir + "test_data" + File.separator + "CVS");
+		item = items.get(2);
+		assertFile(item, "Repository", baseDir + "test_data" + File.separator + "CVS");
+		item = items.get(3);
+		assertFile(item, "Root", baseDir + "test_data" + File.separator + "CVS");
+		item = items.get(4);
+		assertFile(item, "Template", baseDir + "test_data" + File.separator + "CVS");
+		item = items.get(5);
+		assertDir(item, "read", baseDir + "test_data");
+		
+		item = items.get(6);
+		assertFile(item, ".hidden", baseDir + "test_data" + File.separator + "read");
+		item = items.get(7);
+		assertDir(item, "CVS", baseDir + "test_data" + File.separator + "read");
+		item = items.get(8);
+		assertFile(item, "Entries", baseDir + "test_data" + File.separator + "read" + File.separator + "CVS");
+		item = items.get(9);
+		assertFile(item, "Repository", baseDir + "test_data" +File.separator + "read" + File.separator + "CVS");
+		item = items.get(10);
+		assertFile(item, "Root", baseDir + "test_data" + File.separator + "read" + File.separator + "CVS");
+		item = items.get(11);
+		assertFile(item, "Template", baseDir + "test_data" + File.separator + "read" + File.separator + "CVS");
+		item = items.get(12);
+		assertFile(item, "hello.txt", baseDir + "test_data" + File.separator + "read" );
+		
+		item = items.get(13);
+		assertDir(item, "write", baseDir + "test_data");
+		
+		item = items.get(14);
+		assertDir(item, "CVS", baseDir + "test_data" + File.separator + "write");
+		item = items.get(15);
+		assertFile(item, "Repository", baseDir + "test_data" +File.separator + "write" + File.separator + "CVS");
+		item = items.get(16);
+		assertFile(item, "Root", baseDir + "test_data" + File.separator + "write" + File.separator + "CVS");
+		item = items.get(17);
+		assertFile(item, "Template", baseDir + "test_data" + File.separator + "write" + File.separator + "CVS");
+	}
+
+	public void assertFile(DiskItem item, String name, String pathPart) {
+		assertEquals(name, item.getName());
+		assertFalse(item.isDirectory());
+		assertTrue(item.isFile());
+		String path = item.getPath();
+		assertTrue(path.contains(pathPart));
+	}
+	
+	public void assertDir(DiskItem item, String name, String pathPart) {
+		assertEquals(name, item.getName());
+		assertTrue(item.isDirectory());
+		assertFalse(item.isFile());
+		String path = item.getPath();
+		assertTrue(path.contains(pathPart));
 	}
 	
 	public void testListContentsRecurseOne() throws Exception {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
-		List<DiskItem> items = con.listContents("test_data", 1);
-		assretCleanTestData(items);
+		List<DiskItem> items = con.listContents(baseDir + "test_data", 1);
+		assertEquals(11,items.size());
+		DiskItem item = items.get(0);
+		assertDir(item, "CVS", baseDir + "test_data");
+		item = items.get(1);
+		assertFile(item, "Entries", baseDir + "test_data" + File.separator + "CVS");
+		item = items.get(2);
+		assertFile(item, "Repository", baseDir + "test_data" + File.separator + "CVS");
+		item = items.get(3);
+		assertFile(item, "Root", baseDir + "test_data" + File.separator + "CVS");
+		item = items.get(4);
+		assertFile(item, "Template", baseDir + "test_data" + File.separator + "CVS");
+		item = items.get(5);
+		assertDir(item, "read", baseDir + "test_data");
+		
+		item = items.get(6);
+		assertFile(item, ".hidden", baseDir + "test_data" + File.separator + "read");
+		item = items.get(7);
+		assertDir(item, "CVS", baseDir + "test_data" + File.separator + "read");
+		item = items.get(8);
+		assertFile(item, "hello.txt", baseDir + "test_data" + File.separator + "read" );
+		
+		item = items.get(9);
+		assertDir(item, "write", baseDir + "test_data");
+		
+		item = items.get(10);
+		assertDir(item, "CVS", baseDir + "test_data" + File.separator + "write");
 	}
 
-	public void assretCleanTestData(List<DiskItem> items) {
-		assertEquals(4, items.size());
-		DiskItem item = items.get(0);
-		assertEquals("read", item.getName());
-		assertTrue(item.isDirectory());
-		assertFalse(item.isFile());
-		String path = item.getPath();
-		assertTrue(path.contains("test_data"));
-		
-		item = items.get(1);
-		assertEquals(".hidden", item.getName());
-		assertFalse(item.isDirectory());
-		assertTrue(item.isFile());
-		path = item.getPath();
-		assertTrue(path.contains("test_data" + File.separator + "read"));
-		
-		item = items.get(2);
-		assertEquals("hello.txt", item.getName());
-		assertFalse(item.isDirectory());
-		assertTrue(item.isFile());
-		path = item.getPath();
-		assertTrue(path.contains("test_data" + File.separator + "read"));
-		
-		item = items.get(3);
-		assertEquals("write", item.getName());
-		assertTrue(item.isDirectory());
-		assertFalse(item.isFile());
-		path = item.getPath();
-		assertTrue(path.contains("test_data"));
-	}
 	
 	
 	public void testListContentsWithFilter() throws Exception {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
-		List<DiskItem> items = con.listContents("test_data", txtFileFilter, 0);
+		List<DiskItem> items = con.listContents(baseDir + "test_data", txtFileFilter, 0);
 		assertEquals(0, items.size());
 	}
 	
@@ -205,27 +265,27 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 	public void testListContentsWithFilterInfinateRecurse() throws Exception {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
-		List<DiskItem> items = con.listContents("test_data", txtFileFilter,  -1);
+		List<DiskItem> items = con.listContents(baseDir + "test_data", txtFileFilter,  -1);
 		assertEquals(1, items.size());
 		DiskItem item = items.get(0);
 		assertEquals("hello.txt", item.getName());
 		assertFalse(item.isDirectory());
 		assertTrue(item.isFile());
 		String path = item.getPath();
-		assertTrue(path.contains("test_data" + File.separator + "read"));
+		assertTrue(path.contains(baseDir + "test_data" + File.separator + "read"));
 		
 	}
 	
 	public void testListContentsWithFilterRecurseOne() throws Exception {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
-		List<DiskItem> items = con.listContents("test_data", txtFileFilter,  1);
+		List<DiskItem> items = con.listContents(baseDir + "test_data", txtFileFilter,  1);
 		assertEquals(1, items.size());
 		DiskItem item = items.get(0);
 		assertEquals("hello.txt", item.getName());
 		assertFalse(item.isDirectory());
 		assertTrue(item.isFile());
 		String path = item.getPath();
-		assertTrue(path.contains("test_data" + File.separator + "read"));
+		assertTrue(path.contains(baseDir + "test_data" + File.separator + "read"));
 	}
 }
