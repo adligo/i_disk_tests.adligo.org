@@ -12,9 +12,9 @@ public class BaseDir {
 		if (file.exists()) {
 			baseDir = "source" + File.separator;
 		}
-		file = new File("jse_main");
+		file = new File("platforms");
 		if (file.exists()) {
-			baseDir = "jse_main" + File.separator + "source" + File.separator;
+			baseDir = "platforms" + File.separator + "jse_main" + File.separator + "source" + File.separator;
 		}
 	}
 	
