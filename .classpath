@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/adi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/adig"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/i_log"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/i_util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/i_pool"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/params"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/models_core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/i_disk"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tests"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
