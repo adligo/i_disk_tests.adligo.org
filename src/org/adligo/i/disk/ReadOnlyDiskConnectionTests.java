@@ -6,12 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.adligo.i.pool.I_Pool;
 import org.adligo.i.pool.Pool;
 import org.adligo.i.pool.PoolConfiguration;
 import org.adligo.tests.ATest;
 
 public class ReadOnlyDiskConnectionTests extends ATest {
-	private Pool<ReadOnlyDiskConnection> pool = new Pool<ReadOnlyDiskConnection>(
+	private I_Pool<ReadOnlyDiskConnection> pool = new Pool<ReadOnlyDiskConnection>(
 			new PoolConfiguration<ReadOnlyDiskConnection>("testFactory", new ReadOnlyDiskConnectionFactory(), 1));
 	private InputStream in;
 	private FileFilter txtFileFilter = new FileFilter() {
@@ -33,8 +34,8 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 	
 	public void testCheckIfFileExists() {
 		ReadOnlyDiskConnection con = pool.getConnection();
-		assertFalse(con.checkIfFileExists("test_data/foo.txt"));
-		assertTrue(con.checkIfFileExists("test_data/read/hello.txt"));
+		assertFalse("running in " + new File(".").getAbsolutePath(), con.checkIfFileExists("test_data/foo.txt"));
+		assertTrue("running in " + new File(".").getAbsolutePath(),con.checkIfFileExists("test_data/read/hello.txt"));
 		con.returnToPool();
 	}
 	
