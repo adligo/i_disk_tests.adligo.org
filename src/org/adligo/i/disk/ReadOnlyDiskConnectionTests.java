@@ -8,12 +8,11 @@ import java.util.List;
 
 import org.adligo.i.pool.I_Pool;
 import org.adligo.i.pool.Pool;
-import org.adligo.i.pool.PoolConfiguration;
+import org.adligo.i.pool.PoolConfigurationMutant;
 import org.adligo.tests.ATest;
 
 public class ReadOnlyDiskConnectionTests extends ATest {
-	private I_Pool<ReadOnlyDiskConnection> pool = new Pool<ReadOnlyDiskConnection>(
-			new PoolConfiguration<ReadOnlyDiskConnection>("testFactory", new ReadOnlyDiskConnectionFactory(), 1));
+	private I_Pool<ReadOnlyDiskConnection> pool;
 	public static String baseDir = BaseDir.getBaseDir("i_disk_tests");
 	
 	private InputStream in;
@@ -28,6 +27,10 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 		}
 	};
 	
+	public void setUp() throws Exception {
+		pool = new Pool<ReadOnlyDiskConnection>(
+				new PoolConfigurationMutant<ReadOnlyDiskConnection>("testFactory", new ReadOnlyDiskConnectionFactory(), 1));
+	}
 		
 	public void testSimpleMethods() {
 		ReadOnlyDiskConnection con = pool.getConnection();
