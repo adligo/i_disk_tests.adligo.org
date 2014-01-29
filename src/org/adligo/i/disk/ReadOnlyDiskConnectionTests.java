@@ -140,22 +140,15 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
 		List<DiskItem> items = con.listContents(baseDir + "test_data", 0);
-		assertEquals(3, items.size());
+		assertEquals(2, items.size());
 		DiskItem item = items.get(0);
-		assertEquals("CVS", item.getName());
+		assertEquals("read", item.getName());
 		assertTrue(item.isDirectory());
 		assertFalse(item.isFile());
 		String path = item.getPath();
 		assertTrue(path.contains("test_data"));
 		
 		item = items.get(1);
-		assertEquals("read", item.getName());
-		assertTrue(item.isDirectory());
-		assertFalse(item.isFile());
-		path = item.getPath();
-		assertTrue(path.contains("test_data"));
-		
-		item = items.get(2);
 		assertEquals("write", item.getName());
 		assertTrue(item.isDirectory());
 		assertFalse(item.isFile());
@@ -167,46 +160,26 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
 		List<DiskItem> items = con.listContents(baseDir + "test_data", -1);
-		assertEquals(18, items.size());
+		assertEquals(7, items.size());
 		DiskItem item = items.get(0);
-		assertDir(item, "CVS", baseDir + "test_data");
-		item = items.get(1);
-		assertFile(item, "Entries", baseDir + "test_data" + File.separator + "CVS");
-		item = items.get(2);
-		assertFile(item, "Entries.Log", baseDir + "test_data" + File.separator + "CVS");
-		item = items.get(3);
-		assertFile(item, "Repository", baseDir + "test_data" + File.separator + "CVS");
-		item = items.get(4);
-		assertFile(item, "Root", baseDir + "test_data" + File.separator + "CVS");
-		item = items.get(5);
+		
 		assertDir(item, "read", baseDir + "test_data");
 		
-		item = items.get(6);
+		item = items.get(1);
 		assertFile(item, ".hidden", baseDir + "test_data" + File.separator + "read");
-		item = items.get(7);
-		assertDir(item, "CVS", baseDir + "test_data" + File.separator + "read");
-		item = items.get(8);
-		assertFile(item, "Entries", baseDir + "test_data" + File.separator + "read" + File.separator + "CVS");
-		item = items.get(9);
-		assertFile(item, "Repository", baseDir + "test_data" +File.separator + "read" + File.separator + "CVS");
-		item = items.get(10);
-		assertFile(item, "Root", baseDir + "test_data" + File.separator + "read" + File.separator + "CVS");
-		item = items.get(11);
+		item = items.get(2);
 		assertFile(item, "hello.txt", baseDir + "test_data" + File.separator + "read" );
 		
-		item = items.get(12);
+		item = items.get(3);
 		assertDir(item, "write", baseDir + "test_data");
+		item = items.get(4);
+		assertFile(item, ".gitignore", baseDir  + "test_data"  + File.separator + "write" );
+		item = items.get(5);
+		assertDir(item, "scotts_data", baseDir  + "test_data"  + File.separator + "write" );
+		item = items.get(6);
+		assertFile(item, ".gitignore", baseDir  + "test_data"  + File.separator + "write" 
+				+ File.separator + "scotts_data");
 		
-		item = items.get(13);
-		assertFile(item, ".cvsignore", baseDir + "test_data" + File.separator + "write");
-		item = items.get(14);
-		assertDir(item, "CVS", baseDir + "test_data" + File.separator + "write");
-		item = items.get(15);
-		assertFile(item, "Entries", baseDir + "test_data" +File.separator + "write" + File.separator + "CVS");
-		item = items.get(16);
-		assertFile(item, "Repository", baseDir + "test_data" + File.separator + "write" + File.separator + "CVS");
-		item = items.get(17);
-		assertFile(item, "Root", baseDir + "test_data" + File.separator + "write" + File.separator + "CVS");
 	}
 
 	public void assertFile(DiskItem item, String name, String pathPart) {
@@ -229,34 +202,21 @@ public class ReadOnlyDiskConnectionTests extends ATest {
 		ReadOnlyDiskConnection con = pool.getConnection();
 		
 		List<DiskItem> items = con.listContents(baseDir + "test_data", 1);
-		assertEquals(12,items.size());
+		assertEquals(6, items.size());
 		DiskItem item = items.get(0);
-		assertDir(item, "CVS", baseDir + "test_data");
-		item = items.get(1);
-		assertFile(item, "Entries", baseDir + "test_data" + File.separator + "CVS");
-		item = items.get(2);
-		assertFile(item, "Entries.Log", baseDir + "test_data" + File.separator + "CVS");
-		item = items.get(3);
-		assertFile(item, "Repository", baseDir + "test_data" + File.separator + "CVS");
-		item = items.get(4);
-		assertFile(item, "Root", baseDir + "test_data" + File.separator + "CVS");
-		item = items.get(5);
 		assertDir(item, "read", baseDir + "test_data");
 		
-		item = items.get(6);
+		item = items.get(1);
 		assertFile(item, ".hidden", baseDir + "test_data" + File.separator + "read");
-		item = items.get(7);
-		assertDir(item, "CVS", baseDir + "test_data" + File.separator + "read");
-		item = items.get(8);
+		item = items.get(2);
 		assertFile(item, "hello.txt", baseDir + "test_data" + File.separator + "read" );
 		
-		item = items.get(9);
+		item = items.get(3);
 		assertDir(item, "write", baseDir + "test_data");
-		
-		item = items.get(10);
-		assertFile(item, ".cvsignore", baseDir + "test_data" + File.separator + "write");
-		item = items.get(11);
-		assertDir(item, "CVS", baseDir + "test_data" + File.separator + "write");
+		item = items.get(4);
+		assertFile(item, ".gitignore", baseDir  + "test_data"  + File.separator + "write" );
+		item = items.get(5);
+		assertDir(item, "scotts_data", baseDir  + "test_data"  + File.separator + "write" );
 	}
 
 	
