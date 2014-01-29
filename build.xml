@@ -4,5 +4,5 @@
 			          description="properties that tailor the build to your computer."/>
 	<property file="${user.home}/conf/adligo/adligo_lib.properties"/>
 	<property file="build.properties" />
-	<import file="${user.home}/conf/adligo/build.xml"/>
+	<import file="${user.home}/conf/adligo/jse-test-build.xml"/>
 </project>
