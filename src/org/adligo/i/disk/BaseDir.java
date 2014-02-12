@@ -2,7 +2,7 @@ package org.adligo.i.disk;
 
 import java.io.File;
 
-import org.adligo.i.util.client.StringUtils;
+import org.adligo.i.util.shared.StringUtils;
 
 public class BaseDir {
 	public static String baseDir = "";
