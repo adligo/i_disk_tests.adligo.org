@@ -1,4 +1,4 @@
-package org.adligo.i.disk;
+package org.adligo.i.disk_tests;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.adligo.i.disk.DiskItem;
+import org.adligo.i.disk.I_InputProcessor;
+import org.adligo.i.disk.ReadOnlyDiskConnection;
+import org.adligo.i.disk.ReadOnlyDiskConnectionFactory;
 import org.adligo.i.pool.I_Pool;
 import org.adligo.i.pool.Pool;
 import org.adligo.i.pool.PoolConfigurationMutant;

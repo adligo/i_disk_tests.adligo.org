@@ -1,4 +1,4 @@
-package org.adligo.i.disk;
+package org.adligo.i.disk_tests;
 
 import java.io.File;
 
