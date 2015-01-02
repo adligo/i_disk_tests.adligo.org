@@ -1,6 +1,7 @@
 bin/
 classes/
 classes_e/
+/build/
 test_reports/
 test_failure.properties
 i_disk_tests*.jar
