@@ -13,7 +13,8 @@
         <lns:project>i_log.adligo.org</lns:project>
         <lns:project>i_pool.adligo.org</lns:project>
         <lns:project>i_util.adligo.org</lns:project>
-        <lns:project>params.adligo.org</lns:project>
         <lns:project>models_core.adligo.org</lns:project>
+        <lns:project>params.adligo.org</lns:project>
+        <lns:project>tests.adligo.org</lns:project>
     </lns:dependencies>
  </tns:fabricate_project>
