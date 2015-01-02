@@ -9,6 +9,7 @@
     	<lns:library>junit</lns:library>
     	<lns:project>i_adi.adligo.org</lns:project>
         <lns:project>i_adig.adligo.org</lns:project>
+        <lns:project>i_disk.adligo.org</lns:project>
         <lns:project>i_log.adligo.org</lns:project>
         <lns:project>i_pool.adligo.org</lns:project>
         <lns:project>i_util.adligo.org</lns:project>

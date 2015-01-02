@@ -8,7 +8,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/params.adligo.org"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/models_core.adligo.org"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/i_disk.adligo.org"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tests"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tests.adligo.org"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/i_adi.adligo.org"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/i_adig.adligo.org"/>
