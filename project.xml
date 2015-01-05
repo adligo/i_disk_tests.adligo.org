@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tns:fabricate_project xmlns:tns="http://www.adligo.org/fabricate/xml/io/project/v1_0" 
-    xmlns:lns="http://www.adligo.org/fabricate/xml/io/library/v1_0" 
+<tns:fabricate_project xmlns:tns="http://www.adligo.org/fabricate/xml/io_v1/project_v1_0.xsd" 
+    xmlns:lns="http://www.adligo.org/fabricate/xml/io_v1/library_v1_0.xsd" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
     <tns:stages>
         <tns:stage name="jar" />
     </tns:stages>
-    <lns:dependencies>
+    <tns:dependencies>
     	<lns:library>junit</lns:library>
     	<lns:project>i_adi.adligo.org</lns:project>
         <lns:project>i_adig.adligo.org</lns:project>
@@ -16,5 +16,5 @@
         <lns:project>models_core.adligo.org</lns:project>
         <lns:project>params.adligo.org</lns:project>
         <lns:project>tests.adligo.org</lns:project>
-    </lns:dependencies>
+    </tns:dependencies>
  </tns:fabricate_project>
