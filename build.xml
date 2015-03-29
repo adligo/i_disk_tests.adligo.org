@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="jar_and_test" name="i_disk_tests">
-	<import file="${user.home}/conf/adligo/builds/jse-test-build.xml"/>
-</project>
